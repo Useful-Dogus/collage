@@ -64,9 +64,9 @@
   </head>
   <body>
     <input type="file" id="fileInput" multiple accept="image/*" />
-    <button id="createCollage">Create Collage</button>
+    <button id="createCollage">콜라주 생성하기</button>
     <div class="canvas-container">
-      <a id="downloadLink">Download Collage</a>
+      <a id="downloadLink">콜라주 다운로드 받기</a>
       <canvas id="canvas"></canvas>
     </div>
 
@@ -79,7 +79,7 @@
       document.getElementById('createCollage').addEventListener('click', async () => {
         const files = fileInput.files;
         if (files.length === 0) {
-          alert('Please select images.');
+          alert('이미지를 선택해주세요.');
           return;
         }
 
@@ -114,7 +114,7 @@
         downloadLink.href = collageData;
         downloadLink.download = 'collage.jpg';
         downloadLink.style.display = 'block';
-        downloadLink.textContent = 'Download Collage';
+        downloadLink.textContent = '콜라주 다운로드 받기';
       });
     </script>
   </body>

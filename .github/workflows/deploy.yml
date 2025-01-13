@@ -13,23 +13,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
+      - name: Set up environment variable for GA_MEASUREMENT_ID
+        run: echo "GA_MEASUREMENT_ID=${{ secrets.GA_MEASUREMENT_ID }}" >> $GITHUB_ENV
 
       - name: Inject GA_MEASUREMENT_ID into HTML file
         run: |
           sed -i "s/{{GA_MEASUREMENT_ID}}/${{ secrets.GA_MEASUREMENT_ID }}/g" index.html
 
-      - name: Build the project
-        run: npm run build
-
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: build
+          folder: .

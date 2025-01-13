@@ -7,6 +7,16 @@
     <meta name="description" content="여러 이미지를 세로로 배열해 콜라주를 만들어요!" />
     <meta name="author" content="Chanhee Park" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_MEASUREMENT_ID}}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', '{{GA_MEASUREMENT_ID}}');
+    </script>
     <style type="text/css">
       body {
         font-family: Arial, sans-serif;
@@ -124,7 +134,33 @@
         downloadLink.download = 'collage.jpg';
         downloadLink.style.display = 'block';
         downloadLink.textContent = '콜라주 다운로드 받기';
+
+        // Log to Google Analytics
+        logToGoogleAnalytics({ imageCount: files.length });
       });
+
+      function logToGoogleAnalytics({ imageCount }) {
+        if (typeof gtag === 'function') {
+          gtag('event', 'create_collage', {
+            event_category: 'interaction',
+            event_label: 'Collage Creation',
+            image_count: imageCount,
+            user_id: getUserId(),
+          });
+        } else {
+          console.warn('Google Analytics is not initialized.');
+        }
+      }
+
+      // Generate or retrieve a user ID
+      function getUserId() {
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+          userId = 'user-' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('userId', userId);
+        }
+        return userId;
+      }
     </script>
   </body>
 </html>

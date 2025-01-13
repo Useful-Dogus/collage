@@ -95,18 +95,24 @@
           })
         );
 
-        // Calculate canvas dimensions
-        const maxWidth = Math.max(...images.map((img) => img.width));
-        const totalHeight = images.reduce((sum, img) => sum + img.height, 0);
+        // Find the smallest width among all images
+        const targetWidth = Math.min(...images.map((img) => img.width));
 
-        canvas.width = maxWidth;
+        // Scale heights to match the target width
+        const scaledHeights = images.map((img) => (img.height / img.width) * targetWidth);
+
+        // Calculate canvas dimensions
+        const totalHeight = scaledHeights.reduce((sum, height) => sum + height, 0);
+        canvas.width = targetWidth;
         canvas.height = totalHeight;
 
-        // Draw images on canvas
+        // Draw resized images on canvas
         let yOffset = 0;
-        for (const img of images) {
-          ctx.drawImage(img, 0, yOffset, img.width, img.height);
-          yOffset += img.height;
+        for (let i = 0; i < images.length; i++) {
+          const img = images[i];
+          const scaledHeight = scaledHeights[i];
+          ctx.drawImage(img, 0, yOffset, targetWidth, scaledHeight);
+          yOffset += scaledHeight;
         }
 
         // Prepare download link

@@ -136,14 +136,31 @@
         downloadLink.textContent = '콜라주 다운로드 받기';
 
         // Log to Google Analytics
-        logToGoogleAnalytics({ imageCount: files.length });
+        logCreate({ imageCount: files.length });
       });
 
-      function logToGoogleAnalytics({ imageCount }) {
+      downloadLink.addEventListener('click', () => {
+        logDownload({ imageCount: fileInput.files.length });
+      });
+
+      function logCreate({ imageCount }) {
         if (typeof gtag === 'function') {
           gtag('event', 'create_collage', {
             event_category: 'interaction',
             event_label: 'Collage Creation',
+            image_count: imageCount,
+            user_id: getUserId(),
+          });
+        } else {
+          console.warn('Google Analytics is not initialized.');
+        }
+      }
+
+      function logDownload({ imageCount }) {
+        if (typeof gtag === 'function') {
+          gtag('event', 'download_collage', {
+            event_category: 'interaction',
+            event_label: 'Collage Download',
             image_count: imageCount,
             user_id: getUserId(),
           });
